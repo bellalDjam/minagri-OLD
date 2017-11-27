@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import dz.minagri.stat.enumeration.Availability;
 import dz.minagri.stat.model.Category;
 import dz.minagri.stat.model.Product;
+import dz.minagri.stat.model.Wilaya;
 import dz.minagri.stat.model.Zone;
 
 @Repository
@@ -19,5 +20,6 @@ public interface ZoneRepository extends JpaRepository<Zone, Long> {
 //	List<Product> findDistinctByProductNameContainingIgnoreCaseOrAvailabilityInOrCategoryIn(
 //            String productName, Collection<Availability> availability,
 //            Collection<Category> category, Pageable page);
-
+	Zone findByNameLike(String name);
+	Zone findOneByName(String name);
 }

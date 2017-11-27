@@ -1,6 +1,7 @@
 package dz.minagri.stat.enumeration;
 
-public enum TypePersonne {AUTRES,
+public enum TypePersonne {
+	AUTRES,
 
 	/**
 	 * 

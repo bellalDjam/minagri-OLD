@@ -1,6 +1,10 @@
 package dz.minagri.stat.model;
-import java.io.Serializable;
+import static org.junit.Assert.assertFalse;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -23,69 +28,102 @@ import dz.minagri.stat.enumeration.TypePersonne;
 import dz.minagri.stat.util.Identifiable;
 
 @Entity
-@Table(name = "Personne")
+@Table(name = "personne")
 public class Personne extends Identifiable {
-	
+
 	private static final long serialVersionUID = 2220804875980046822L;
-	
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	protected Long id;
-    
-	@Column(name = "nom",  nullable = false)
+	
+	@ManyToOne( cascade = CascadeType.ALL)
+	@JoinColumn(name="manager_id")
+    private Personne manager;
+	
+	 @OneToMany(mappedBy="manager")
+	    private List<Personne> directs= new ArrayList<Personne>();
+	 
+	@Column(name = "firstName",  nullable = false)
 	@NotNull
 	@Size(min = 3)
-	private String nom;
-	
-	@Column(name = "prenom", nullable = false)
+	private String firstName;
+
+	@Column(name = "lastName", nullable = false)
 	@NotNull
 	@Size(min = 3)
-	private String prenom;
-	
+	private String lastName;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
 	private Adresse address;
-	
-	@Column(name = "datenaissance")
-	private Date dateNaissance;
-	
-    @Embedded
-    private MoyenContact moyenContact; 
 
-    @Enumerated(EnumType.STRING)
+	@Column(name = "datenaissance",columnDefinition = "DATE")
+	private LocalDate dateNaissance;
+
+	@Embedded
+	private MoyenContact moyenContact; 
+
+	@Enumerated(EnumType.STRING)
 	private TypePersonne typePersonne;
-    
-    @Version
+
+	@Version
 	@Column(name = "version")
 	private Integer version;
-    
-    
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "departement_id", nullable = false)
-  private Departement departement;
+
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "departement_id", nullable = true)
+	private Departement departement;
+	
+//	public Personne() {
+//		directs = new ArrayList<Personne>();
+//	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	/**
+	 * @return the firstName
+	 */
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public String getNom() {
-		return nom;
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	/**
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return lastName;
 	}
 
-	public String getPrenom() {
-		return prenom;
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+	/**
+	 * @return the version
+	 */
+	public Integer getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	public Adresse getAddress() {
@@ -96,11 +134,11 @@ public class Personne extends Identifiable {
 		this.address = address;
 	}
 
-	public Date getDateNaissance() {
+	public LocalDate getDateNaissance() {
 		return dateNaissance;
 	}
 
-	public void setDateNaissance(Date dateNaissance) {
+	public void setDateNaissance(LocalDate dateNaissance) {
 		this.dateNaissance = dateNaissance;
 	}
 
@@ -119,13 +157,42 @@ public class Personne extends Identifiable {
 	public void setTypePersonne(TypePersonne typePersonne) {
 		this.typePersonne = typePersonne;
 	}
-	
+
 	public Departement getDepartement() {
 		return departement;
 	}
-	
+
 	public void setDepartement(Departement departement) {
 		this.departement = departement;
+	}
+	
+
+	/**
+	 * @return the manager
+	 */
+	public Personne getManager() {
+		return manager;
+	}
+
+	/**
+	 * @param manager the manager to set
+	 */
+	public void setManager(Personne manager) {
+		this.manager = manager;
+	}
+
+	/**
+	 * @return the directs
+	 */
+	public List<Personne> getDirects() {
+		return directs;
+	}
+
+	/**
+	 * @param directs the directs to set
+	 */
+	public void setDirects(List<Personne> directs) {
+		this.directs = directs;
 	}
 
 	/* (non-Javadoc)
@@ -133,7 +200,6 @@ public class Personne extends Identifiable {
 	 */
 	@Override
 	public Class<?> getConcreteClass() {
-		// TODO Auto-generated method stub
 		return Personne.class;
 	}
 }

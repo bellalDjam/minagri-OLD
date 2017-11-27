@@ -19,6 +19,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -30,7 +31,7 @@ import com.vaadin.ui.themes.ValoTheme;
  * @author bellal djamel
  *
  */
-public class Menu extends CssLayout {
+public class Menu extends HorizontalLayout {
 
     private static final String VALO_MENUITEMS = "valo-menuitems";
     private static final String VALO_MENU_TOGGLE = "valo-menu-toggle";
@@ -41,61 +42,60 @@ public class Menu extends CssLayout {
     private HorizontalLayout menuItemsLayout;
     private HorizontalLayout menuPart;
 
+    private Button logout =new Button("Logout", event -> logout());
     public Menu(Navigator navigator) {
         this.navigator = navigator;
         setPrimaryStyleName(ValoTheme.MENU_ROOT);
         menuPart = new HorizontalLayout();
-        menuPart.addStyleName(ValoTheme.MENU_PART);
-
-        // header of the menu
-        final HorizontalLayout top = new HorizontalLayout();
-        top.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-        top.addStyleName(ValoTheme.MENU_TITLE);
-        Label title = new Label("My CRUD");
-        title.addStyleName(ValoTheme.LABEL_H3);
-        title.setSizeUndefined();
-        Image image = new Image(null, new ThemeResource("img/table-logo.png"));
-        image.setStyleName("logo");
-        top.addComponent(image);
-        top.addComponent(title);
-        menuPart.addComponent(top);
+//        menuPart.addStyleName(ValoTheme.MENU_PART);
+        menuPart.setWidth("100%");
+        menuPart.setSpacing(false);
+        menuPart.setMargin(false);
+        
+//        // header of the menu
+//        final HorizontalLayout top = new HorizontalLayout();
+//        top.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+//        top.addStyleName(ValoTheme.MENU_TITLE);
+//        Label title = new Label("My CRUD");
+//        title.addStyleName(ValoTheme.LABEL_H3);
+//        title.setSizeUndefined();
+//        Image image = new Image(null, new ThemeResource("img/table-logo.png"));
+//        image.setStyleName("logo");
+//        top.addComponent(image);
+//        top.addComponent(title);
+//        menuPart.addComponent(top);
 
         // logout menu item
-        MenuBar logoutMenu = new MenuBar();
-        logoutMenu.addItem("Logout", VaadinIcons.SIGN_OUT, new Command() {
-
-            @Override
-            public void menuSelected(MenuItem selectedItem) {
-                VaadinSession.getCurrent().getSession().invalidate();
-                Page.getCurrent().reload();
-            }
-        });
-
-        logoutMenu.addStyleName("user-menu");
-        menuPart.addComponent(logoutMenu);
-
+        
+     
+        logout.addStyleName("user-menu");
+        logout.setHeightUndefined();
+     
         // button for toggling the visibility of the menu when on a small screen
-        final Button showMenu = new Button("Menu", new ClickListener() {
-            @Override
-            public void buttonClick(final ClickEvent event) {
-                if (menuPart.getStyleName().contains(VALO_MENU_VISIBLE)) {
-                    menuPart.removeStyleName(VALO_MENU_VISIBLE);
-                } else {
-                    menuPart.addStyleName(VALO_MENU_VISIBLE);
-                }
-            }
-        });
-        showMenu.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        showMenu.addStyleName(ValoTheme.BUTTON_SMALL);
-        showMenu.addStyleName(VALO_MENU_TOGGLE);
-        showMenu.setIcon(VaadinIcons.MENU);
-        menuPart.addComponent(showMenu);
+//        final Button showMenu = new Button("Menu", new ClickListener() {
+//            @Override
+//            public void buttonClick(final ClickEvent event) {
+//                if (menuPart.getStyleName().contains(VALO_MENU_VISIBLE)) {
+//                    menuPart.removeStyleName(VALO_MENU_VISIBLE);
+//                } else {
+//                    menuPart.addStyleName(VALO_MENU_VISIBLE);
+//                }
+//            }
+//        });
+//        showMenu.addStyleName(ValoTheme.BUTTON_PRIMARY);
+//        showMenu.addStyleName(ValoTheme.BUTTON_SMALL);
+//        showMenu.addStyleName(VALO_MENU_TOGGLE);
+//        showMenu.setIcon(VaadinIcons.MENU);
+//        menuPart.addComponent(showMenu);
 
         // container for the navigation buttons, which are added by addView()
         menuItemsLayout = new HorizontalLayout();
+        menuItemsLayout.setWidth("100%");
+        menuItemsLayout.setMargin(false);
         menuItemsLayout.setPrimaryStyleName(VALO_MENUITEMS);
         menuPart.addComponent(menuItemsLayout);
-
+        menuPart.addComponent(logout);
+        menuPart.setComponentAlignment(logout, Alignment.TOP_RIGHT);
         addComponent(menuPart);
     }
 
@@ -125,7 +125,10 @@ public class Menu extends CssLayout {
         menuItemsLayout.addComponent(button);
         viewButtons.put(name, button);
     }
-
+    public void logout() {
+        VaadinSession.getCurrent().getSession().invalidate();
+        Page.getCurrent().reload();
+    }
     /**
      * Highlights a view navigation button as the currently active view in the
      * menu. This method does not perform the actual navigation.

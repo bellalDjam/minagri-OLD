@@ -13,9 +13,14 @@ import com.vaadin.ui.themes.ValoTheme;
 @UIScope
 public class AccessDeniedView extends VerticalLayout implements View {
 
-    public AccessDeniedView() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3348842858614746336L;
+
+	public AccessDeniedView() {
         setMargin(true);
-        Label lbl = new Label("You don't have access to this view.");
+        Label lbl = new Label("PAS D'AUTORIZATION POUR CETTE PAGE Consulter votre Administrateur");
         lbl.addStyleName(ValoTheme.LABEL_FAILURE);
         lbl.setSizeUndefined();
         addComponent(lbl);

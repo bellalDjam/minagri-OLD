@@ -1,6 +1,5 @@
 package dz.minagri.stat.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -44,7 +43,7 @@ public class Departement extends Identifiable {
     private MoyenContact moyenContact; 
     
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", nullable = true)
+    @JoinColumn(name = "address_id", unique= true, nullable=true, insertable=true, updatable=true)
 	private Adresse address;
     
     @Column(name = "typeDepartement", nullable = false)
@@ -116,13 +115,15 @@ public class Departement extends Identifiable {
 	public void setTransfert(Transfert transfert) {
 		this.transfert = transfert;
 	}
-
+	public void addPersonne(Personne  personne) {
+		personne.setDepartement(this);
+		personnes.add(personne);
+	}
 	/* (non-Javadoc)
 	 * @see dz.minagri.stat.util.Identifiable#getConcreteClass()
 	 */
 	@Override
 	public Class<?> getConcreteClass() {
-		// TODO Auto-generated method stub
 		return Departement.class;
 	}
 	

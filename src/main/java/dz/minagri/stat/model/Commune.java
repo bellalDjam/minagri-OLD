@@ -20,6 +20,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import dz.minagri.stat.enumeration.TypeCommune;
 import dz.minagri.stat.util.Identifiable;
 
@@ -35,51 +38,40 @@ public class Commune extends Identifiable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	
-    private String name;
-    
-//	@Version
-//    private int version;
-    
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "wilaya_id")
+	@Column(name = "name",unique=true)
+	private String name;
+
+	@Version
+	private int version;
+
+	@ManyToOne()
+	@JoinColumn(name = "wilaya_id", nullable = false)
 	private Wilaya wilaya;
-	
+
 	@Column(name = "type_commune")
 	@Enumerated(EnumType.STRING)
-    private TypeCommune TypeCommune;
-	
+	private TypeCommune typeCommune;
+
 	private Integer caract1;
-	
+
 	private String caract2;
+
+	@OneToMany(mappedBy = "commune",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Zone> zones;
 	
 	@Column(name = "codesubdivision")
 	private Long codeSubdiv;
-		
-    @Column(name = "codecommune" )
+
+	@Column(unique= true, name = "codecommune" )
 	private Long codeCommune;
-    
-    @OneToMany(mappedBy = "commune", cascade = CascadeType.ALL)
-   private List<Zone> zones;
-    
+
+	@OneToMany(mappedBy = "commune", cascade = CascadeType.ALL)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Adresse> adresses;
+
 	public Commune() {
-		super();
+		
 	}
-
-	/**
-	 * @return the version
-	 */
-//	public int getVersion() {
-//		return version;
-//	}
-//
-//	/**
-//	 * @param version the version to set
-//	 */
-//	public void setVersion(int version) {
-//		this.version = version;
-//	}
-
 	/**
 	 * @return the caract1
 	 */
@@ -135,54 +127,85 @@ public class Commune extends Identifiable {
 	public void setCodeCommune(Long codeCommune) {
 		this.codeCommune = codeCommune;
 	}
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
 
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	/**
+	 * @return the typeCommune
+	 */
+	public TypeCommune getTypeCommune() {
+		return typeCommune;
+	}
+
+	/**
+	 * @param typeCommune the typeCommune to set
+	 */
+	public void setTypeCommune(TypeCommune typeCommune) {
+		typeCommune = typeCommune;
+	}
+
+	/**
+	 * @return the adresses
+	 */
+	public List<Adresse> getAdresses() {
+		return adresses;
+	}
+	/**
+	 * @param adresses the adresses to set
+	 */
+	public void setAdresses(List<Adresse> adresses) {
+		this.adresses = adresses;
+	}
+	/**
+	 * @return the zones
+	 */
+	public List<Zone> getZones() {
+		return zones;
+	}
+
+	/**
+	 * @param zones the zones to set
+	 */
+	public void setZones(List<Zone> zones) {
+		this.zones = zones;
+	}
+
+	public void addZone(Zone zone) {
+		zone.setCommune(this);
+		zones.add(zone);
+	}
+
+	public void addAdresse(Adresse adresse) {
+		adresse.setCommune(this);
+		adresses.add(adresse);
+	}
+
+	/**
+	 * @return the version
+	 */
+	public int getVersion() {
+		return version;
+	}
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(int version) {
+		this.version = version;
+	}
 	@Override
 	public Class<?> getConcreteClass() {
 		return Commune.class;
 	}
-	  /**
-		 * @return the name
-		 */
-		public String getName() {
-			return name;
-		}
-
-		/**
-		 * @param name the name to set
-		 */
-		public void setName(String name) {
-			this.name = name;
-		}
-		/**
-		 * @return the typeCommune
-		 */
-		public TypeCommune getTypeCommune() {
-			return TypeCommune;
-		}
-
-		/**
-		 * @param typeCommune the typeCommune to set
-		 */
-		public void setTypeCommune(TypeCommune typeCommune) {
-			TypeCommune = typeCommune;
-		}
-
-		/**
-		 * @return the zones
-		 */
-		public List<Zone> getZones() {
-			return zones;
-		}
-
-		/**
-		 * @param zones the zones to set
-		 */
-		public void setZones(List<Zone> zones) {
-			this.zones = zones;
-		}
-
-    
-    
 
 }
 

@@ -11,7 +11,7 @@ import com.vaadin.server.VaadinSession;
  */
 public class VaadinSessionSecurityContextHolderStrategy implements SecurityContextHolderStrategy {
 
-    @Override
+	@Override
     public void clearContext() {
         getSession().setAttribute(SecurityContext.class, null);
     }

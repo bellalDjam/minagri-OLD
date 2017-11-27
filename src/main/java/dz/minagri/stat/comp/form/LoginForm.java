@@ -2,18 +2,26 @@ package dz.minagri.stat.comp.form;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class LoginForm extends VerticalLayout {
 
-    public LoginForm(LoginCallback callback) {
-        setMargin(true);
-        setSpacing(true);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3107726977454285307L;
 
+	public LoginForm(LoginCallback callback) {
+        setSizeFull();
+        
+        VerticalLayout centerLayout = new VerticalLayout();
+        centerLayout.setSizeUndefined();
+        
         TextField username = new TextField("Username");
-        addComponent(username);
+        centerLayout.addComponent(username);
 
         PasswordField password = new PasswordField("Password");
-        addComponent(password);
+        centerLayout.addComponent(password);
 
         Button login = new Button("Login", evt -> {
             String pword = password.getValue();
@@ -24,7 +32,10 @@ public class LoginForm extends VerticalLayout {
             }
         });
         login.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        addComponent(login);
+        login.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        centerLayout.addComponent(login);
+        addComponent(centerLayout);
+        setComponentAlignment(centerLayout, Alignment.MIDDLE_CENTER);
     }
 
     @FunctionalInterface

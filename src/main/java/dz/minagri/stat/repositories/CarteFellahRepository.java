@@ -11,6 +11,6 @@ import dz.minagri.stat.model.CarteFellah;
 @Repository
 public interface CarteFellahRepository extends JpaRepository<CarteFellah, Long> {
 
-	
+	CarteFellah findByNumS12Like(String numS12);
 	 List<CarteFellah> findAllByNumS12ContainingIgnoreCase(String numS12);
 }

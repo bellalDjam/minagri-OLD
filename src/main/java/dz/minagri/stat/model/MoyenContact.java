@@ -30,10 +30,6 @@ public class MoyenContact extends Identifiable {
 	private String gsm;
 	
     @Column(name = "email")
-    @NotNull
-	@Size(min = 3)
-	// @Pattern(regexp =
-	// "^[_A-Za-z0-9-]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")
 	private String email;
 	
     /**
@@ -41,6 +37,20 @@ public class MoyenContact extends Identifiable {
 	 */
 	public MoyenContact() {
 		super();
+	}
+
+	/**
+	 * @param fax
+	 * @param telephone
+	 * @param gsm
+	 * @param email
+	 */
+	public MoyenContact(String fax, String telephone, String gsm, String email) {
+		super();
+		this.fax = fax;
+		this.telephone = telephone;
+		this.gsm = gsm;
+		this.email = email;
 	}
 
 	public String getFax() {

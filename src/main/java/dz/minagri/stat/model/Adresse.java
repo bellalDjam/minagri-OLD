@@ -3,11 +3,12 @@ package dz.minagri.stat.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 
 import dz.minagri.stat.util.Identifiable;
@@ -20,7 +21,7 @@ public class Adresse extends Identifiable {
     private static final long serialVersionUID = 178515645232651000L;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
     @Version
     private int version;
@@ -36,15 +37,14 @@ public class Adresse extends Identifiable {
     private String boitePostale;
 
     @Column(name = "codePostal")
-    private Integer codePostal;
+    private Long codePostal;
     
-    @Column(name = "nomCommune")
-    @Size(max = 20)
-	private String nomCommune;
+    @ManyToOne
+	@JoinColumn(name = "commune_id", nullable = false)
+	private Commune commune;
     
-    
-
-
+//    @OneToOne(mappedBy="address")
+//    private Departement departement;
     /**
      * Constructeur.
      */
@@ -52,6 +52,13 @@ public class Adresse extends Identifiable {
 
     }
 
+    
+    public 	Adresse(String numero,String rue,Long codePostal,Commune commune) {
+    	this.numero =numero;
+    	this.rue =rue;
+    	this.codePostal =codePostal;
+    	this.commune =commune;
+    }
     public Long getId() {
 		return id;
 	}
@@ -59,8 +66,7 @@ public class Adresse extends Identifiable {
     public void setId(Long id) {
 		this.id = id;
 	}
-    
-    
+
     public String getRue() {
 	return rue;
     }
@@ -85,20 +91,27 @@ public class Adresse extends Identifiable {
 	this.boitePostale = boitePostale;
     }
 
-	public Integer getCodePostal() {
+	public Long getCodePostal() {
 		return codePostal;
 	}
 
-	public void setCodePostal(Integer codePostal) {
+	public void setCodePostal(Long codePostal) {
 		this.codePostal = codePostal;
 	}
 
-	public String getNomCommune() {
-		return nomCommune;
+	/**
+	 * @return the commune
+	 */
+	public Commune getCommune() {
+		return commune;
 	}
 
-	public void setNomCommune(String nomCommune) {
-		this.nomCommune = nomCommune;
+
+	/**
+	 * @param commune the commune to set
+	 */
+	public void setCommune(Commune commune) {
+		this.commune = commune;
 	}
 
 
@@ -108,12 +121,31 @@ public class Adresse extends Identifiable {
 	@Override
 	public String toString() {
 		return "Adresse [id=" + id + ", rue=" + rue + ", numero=" + numero + ", boitePostale=" + boitePostale
-				+ ", codePostal=" + codePostal + ", nomCommune=" + nomCommune + "]";
+				+ ", codePostal=" + codePostal + ", nomCommune=" + "]";
 	}
+
+	/**
+	 * @return the departement
+	 */
+//	public Departement getDepartement() {
+//		return departement;
+//	}
+//
+//
+//	/**
+//	 * @param departement the departement to set
+//	 */
+//	public void setDepartement(Departement departement) {
+//		this.departement = departement;
+//	}
+
 
 	/* (non-Javadoc)
 	 * @see dz.minagri.stat.util.Identifiable#getConcreteClass()
 	 */
+	public boolean persisted() {
+		return getId()!=null;
+	}
 	@Override
 	public Class<?> getConcreteClass() {
 		// TODO Auto-generated method stub

@@ -26,6 +26,11 @@ public  class DataService  implements Serializable{
 	 /**
 	 * 
 	 */
+	private static final long serialVersionUID = 5244725925453207691L;
+
+	/**
+	 * 
+	 */
 	@Autowired
     private ProductRepository productRepository;
 

@@ -1,6 +1,5 @@
 package dz.minagri.stat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -9,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import dz.minagri.stat.enumeration.TypeCommune;
-import dz.minagri.stat.model.Commune;
-import dz.minagri.stat.model.Wilaya;
+import com.vaadin.spring.navigator.SpringViewProvider;
+
+import dz.minagri.stat.model.Adresse;
+import dz.minagri.stat.repositories.AdresseRepository;
 import dz.minagri.stat.repositories.CarteFellahRepository;
 import dz.minagri.stat.repositories.CommuneRepository;
 import dz.minagri.stat.repositories.WilayaRepository;
+import junit.framework.Assert;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,78 +25,95 @@ public class MinagriApplicationTests {
 
 	@Autowired
 	WilayaRepository wRepo;
+	@Autowired
+	AdresseRepository adRepo;
 	
 	@Autowired
 	CommuneRepository cRepo;
+	@Autowired
+	 SpringViewProvider viewProvider;
 	
-	private static final String cames[] = new String[] {"Aïn Naga","Aïn Zaatout"
-				,"Besbes" ,"Biskra"	,"Bordj Ben Azzouz"	,"Bouchagroune"
-				,"Branis","Chetma"	,"Djemorah"	,"Doucen"	,"Ech Chaïba"
-				,"El Feidh"	, "El Ghrous", "El Hadjeb", "El Haouch"
-				,"El Kantara" ,"El Mizaraa"	,"El Outaya" ,"Foughala"
-				,"Khenguet Sidi Nadji"	,"Lichana"	,"Lioua" ,"M'Chouneche"
-				,"Mekhadma"	,"M'Lili", "Ouled Djellal", "Oumache"
-				,"Ourlal" , "Ras El Miaad" , "Sidi Khaled", "Sidi Okba"
-				,"Tolga","Zeribet El Oued"};
-	@Test
-	public void contextLoads() {
-	}
-
+	private static final String cames[] = new String[] {"Biskra","Oumache","Branis","Chetma", "Ouled Djellal","Ras El Miaad" ,"Besbes" ,"Sidi Khaled",
+			"Doucen","Ech Chaïba","Sidi Okba","M'Chouneche","El Haouch","Aïn Naga","Zeribet El Oued","El Feidh"	,"El Kantara" ,
+			"Aïn Zaatout","El Outaya" ,"Djemorah"	,"Tolga","Lioua","Lichana", "Ourlal","M'Lili","Foughala","Bordj Ben Azzouz", "El Mizaraa","Bouchagroune"
+			,"Mekhadma", "El Ghrous", "El Hadjeb","Khenguet Sidi Nadji"};	
+	private static final String supwil[] = new String[] {"439700","4795","25057","6783", "12192","3268" ,"20986" ,"162200"
+			,"1575","4439","556185","14227","9061","20673","3568","1190","66415" ,"2577","6504"	,"6764" ,"4026","9096","1439"
+			,"4101", "2187","8866"	,"2175","18718", "5941","211980","2121", "78870", "285000","4115","1356","3339","159000"
+			,"3152", "54573","9811","4541", "1605", "9373","4891","29950", "2379", "86105","4870"};		
+					
+	private static final String cwil[] = new String[] {"ADRAR","CHLEF","LAGHOUAT","OUM EL BOUAGHI", "BATNA","BEJAIA" ,"BISKRA" ,"BECHAR",
+			"BLIDA","BOUIRA","TAMANRASSET","TEBESSA","TLEMCEN","TIARET","TIZI OUZOU","ALGER","DJELFA" ,"JIJEL",
+			"SETIF","SAIDA" ,"SKIKDA"	,"SIDI BEL ABBES","ANNABA","GUELMA", "CONSTANTINE","MEDEA","MOSTAGANEM","M’SILA", "MASCARA","OUARGLA"
+			,"ORAN", "EL BAYADH", "ILLIZI", "BORDJ BOU ARRERIDJ","BOUMERDES","EL TARF","TINDOUF","TISSEMSILT", "EL OUED","KHENCHELA"
+			,"SOUK AHRAS", "TIPAZA", "MILA","AIN DEFLA","NAAMA", "AIN TEMOUCHENT", "GHARDAIA","RELIZANE"};
+	
+	private static final String comAl[] = new String[] {"Alger-Centre","Sidi M'Hamed","El Madania","Belouizdad","Bab El Oued","Bologhine","Casbah",
+			"Oued Koriche","Bir Mourad Raïs","El Biar","Bouzareah","Birkhadem","El Harrach","Baraki","Oued Smar","Bachdjerrah","Hussein Dey","Kouba"
+			,"Bourouba","Dar El Beïda","Bab Ezzouar","Ben Aknoun","Dely Ibrahim","El Hammamet","Raïs Hamidou","Djasr Kasentina","El Mouradia","Hydra"
+			,"Mohammadia","Bordj El Kiffan","El Magharia","Beni Messous","Les Eucalyptus","Birtouta","Tessala El Merdja","Ouled Chebel","Sidi Moussa"
+			,"Aïn Taya","Bordj El Bahri","El Marsa","H'Raoua","Rouïba","Reghaïa","Aïn Benian","Staoueli","Zeralda","Mahelma","Rahmania","Souidania"
+			,"Cheraga","Ouled Fayet","El Achour","Draria","Douera","Baba Hassen","Khraicia","Saoula"};
+//	
+//	@Test
+//	public void contextLoads() {
+//	}
+//
 	@Test
 	public void testrepo() {
-//		Commune com = new Commune();
-//		com.setWilaya(wRepo.findOne((long) 30593));
-//		com.setTypeCommune(TypeCommune.COMMUNAL);
-//		com.setName("Aïn Naga");
-//		cRepo.save(com);
-//		CarteFellah cf =new CarteFellah();
-//		LocalDate dt = LocalDate.now();
-//		cf.setNumS12("555jj555");
-//		cf.setZone("5555jjjjhhhh55");
-//		cf.setRegistrationDate(dt);
-//		cartRepo.save(cf);	
-//		Wilaya wl = new Wilaya();
-//		wl.setCodeWilaya((long) 07);
-//		wl.setNomWilaya("Biskra");
-
-//		 createCommune(wl);
-//		 wRepo.save(wl);
-//		wRepo.save(wl);
-//		Wilaya wl1 = new Wilaya();
-//		wl1.setCodeWilaya((long) 06);
-//		wl1.setNomWilaya("Blida");
-//		wRepo.save(wl1);
-		 
-		 List<Commune>   coms = new ArrayList<>();
-			
-			for(String  lname :cames ) {
-				 
-				Commune com = new Commune();
-//				com.setWilaya(wRepo.findOne((long) 30593));
-				com.setTypeCommune(TypeCommune.COMMUNAL);
-				com.setName(lname);
-				cRepo.save(com);
-			}
-	}
-
-	/**
-	 * @return
-	 */
-//	private List<Commune> createCommune(Wilaya wl1) {
-////		 Wilaya wl1=wRepo.findOne((long) 25403);
-//		 List<Commune>   coms = new ArrayList<>();
+//		
 //	
-//		for(String  lname :cames ) {
-//			 
-//			Commune com = new Commune();
-//			com.setWilaya(wRepo.findOne((long) 30593));
-//			com.setTypeCommune(TypeCommune.COMMUNAL);
-//			com.setName(lname);
-//			cRepo.save(com);
-//		}
-////		wRepo.save(wl1);
-//		return coms;
 //	}
-	
-	
+		Adresse add1 = new Adresse();
+		add1.setCommune(cRepo.findByNameLike("Biskra"));
+		add1.setCodePostal((long) 701);
+		add1.setNumero("11");
+		add1.setRue("beta");
+		adRepo.save(add1);
+		Adresse add = new Adresse();
+		add.setCommune(cRepo.findByNameLike("Biskra"));
+		add.setCodePostal((long) 701);
+		add.setNumero("1");
+		add.setRue("alfa");
+		adRepo.save(add);
+//		
+//		for(int i=0; i<cwil.length; i++ ) {
+//			Wilaya wil = new Wilaya();
+//			Long code = (long) (100*i+100);
+//			wil.setCodeWilaya(code);
+//			wil.setTotarea(Integer.parseInt(supwil[i]));
+//			wil.setNomWilaya(cwil[i]);
+//			wRepo.save(wil);
+		}
+//	
+//		List<Departement> result = departementDAO.getAll(Departement.class);
+//		 List<Commune>   coms = new ArrayList<>();
+//		 Wilaya bis =wRepo.findOneBynomWilaya("BISKRA");
+//			for(int i=0; i<cames.length; i++ ) {
+//				Long code = (long) (700+i+1);
+//				Commune com = new Commune();
+//				com.setCodeCommune(code);
+//				com.setWilaya(bis);
+//				com.setTypeCommune(TypeCommune.COMMUNAL);
+//				com.setName(cames[i]);
+//				coms.add(com);
+//			}
+//			System.out.println(coms+ " coms");
+//			System.out.println(bis+ " wilaya");
+//			bis.setCommunes(coms);
+//			wRepo.save(bis);
+//
+//	}
+	@Test
+	public void testFindAll() {
+		List<Adresse> result = adRepo.findAll();
+		System.out.println(result);
+//		List<Facture> result1 = factureFDAO.findAllPayedFactures();
+//		System.out.println("AAAAAAAAAAAAAAAAA"+result1.size());
+
+		Assert.assertNotNull(result);
+
+//		Assert.assertEquals(EtatFacture.NONPAYEE, result.get(0).getEtatFacture());
+
+	}
 }

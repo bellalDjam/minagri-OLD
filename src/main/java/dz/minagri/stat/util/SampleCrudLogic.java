@@ -12,10 +12,9 @@ import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 
 import dz.minagri.stat.SecuredUI;
-import dz.minagri.stat.SecurityUtils;
-import dz.minagri.stat.comp.SampleCrudView;
 import dz.minagri.stat.model.Product;
 import dz.minagri.stat.services.DataService;
+import dz.minagri.stat.views.SampleCrudView;
 
 /**
  * This class provides an interface for the logical operations between the CRUD
@@ -51,13 +50,13 @@ public class SampleCrudLogic implements Serializable {
     private SampleCrudLogic() {
     }
 
-    public void init() {
-        editProduct(null);
-        // Hide and disable if not admin
+//    public void init() {
+//        editProduct(null);
+//        // Hide and disable if not admin
 //        if (!SecurityUtils.hasRole("admin")) {
 //            view.setNewProductEnabled(true);
 //        }
-    }
+//    }
 
     public void cancelProduct() {
         setFragmentParameter("");
@@ -138,11 +137,11 @@ public class SampleCrudLogic implements Serializable {
         view.editProduct(new Product());
     }
 
-    public void rowSelected(Product product) {
-        if (!SecurityUtils.hasRole("admin")) {
-            view.editProduct(product);
-        }
-    }
+//    public void rowSelected(Product product) {
+//        if (!SecurityUtils.hasRole("admin")) {
+//            view.editProduct(product);
+//        }
+//    }
 
     private void init(SampleCrudView view) {
         this.view = view;
